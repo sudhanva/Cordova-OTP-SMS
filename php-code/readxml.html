@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Read XML - AJAX Method</title>
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function()
+	{
+	  $.ajax({
+	    type: "POST",
+	    url: "xml.php",
+	    dataType: "xml",
+	    crossDomain:"true",
+	    success: parseXml
+	  });
+	});
+	function parseXml(xml)
+	{
+	  $(xml).find("Course").each(function()
+	  {
+	    var title = $(this).find('title').text();
+	    var duration = $(this).find('duration').text();
+	    $("#output").append("Title:"+ title + " Description " +duration +"<br/>");
+	  });
+	}
+	</script>
+</head>
+<body>
+	XML Reader
+	<div id="output"></div>
+</body>
+</html>
+

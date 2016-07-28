@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="format-detection" content="telephone=no">
+	<meta name="msapplication-tap-highlight" content="no">
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+	<title>Registration</title>
+	<link rel="stylesheet" type="text/css" href="css/ionic.css">
+	<script type="text/javascript" src="js/jquery 1.10.2.js"></script>
+	<script src="js/sweetalert.min.js"></script> 
+	<link rel="stylesheet" type="text/css" href="css/sweetalert.css">
+	<style>
+		table {
+			border-spacing: 0;
+			width: 100%;
+			border: 1px solid #ddd;
+		}
+		th, td {
+			text-align: left;
+			padding: 8px;
+		}
+
+		tr:nth-child(even){background-color: #f2f2f2}
+	</style>
+	<script type="text/javascript">
+		function check_otp(){
+			$("#otp_code").keyup(function () {
+				if ($(this).val()) {
+					$(".general_button").show();
+				}
+				else {
+					$(".general_button").hide();
+				}
+			});
+		}
+		function ajax_request()
+		{		
+			var fname=$("#fname").val();
+			var isd=$("#isd").val();
+			var mobile=$("#mobile").val();
+			var email=$("#email").val();
+			
+			var demo=document.getElementById("demo").innerHTML;
+			var gcm_id=document.getElementById("gcm_id").innerHTML;
+			//alert(gcm_id);
+			var dataString="fname="+fname+"&isd="+isd+"&mobile="+mobile+"&email="+email+"&demo="+demo+"&gcm_id="+gcm_id+"&verify=";
+			$.ajax({
+				type: "POST",
+					//url: "http://phonegappro.esy.es/test/insert.php",
+					url:"http://192.168.10.45/php/www/ajax/verify.php",
+					data: dataString,
+					crossDomain: true,
+					cache: false,
+					beforeSend: function() 
+					{
+						$("#signup_status").html('<br clear="all"><div style="padding-left:115px;"><font style="font-family:Verdana, Geneva, sans-serif; font-size:12px; color:black;">Please wait</font> <img src="images/loadings.gif" alt="Loading...." align="absmiddle" title="Loading...."/></div><br clear="all">');
+					},
+					success: function(response)
+					{
+						$("#signup_status").hide().fadeIn('slow').html(response);
+					}
+				});
+
+		}
+		
+		function verify()
+		{
+			var mobile_toverify=$("#mobile_toverify").val();
+			var otp_code=$("#otp_code").val();
+			var demo=document.getElementById("demo").innerHTML;
+			//alert(demo);
+			var dataString="otp_code="+otp_code+"&demo="+demo+"&mobile_toverify="+mobile_toverify+"&otp_verify=";
+			$.ajax({
+				type: "POST",
+					//url: "http://phonegappro.esy.es/test/insert.php",
+					url:"http://192.168.10.45/php/www/ajax/verify.php",
+					data: dataString,
+					crossDomain: true,
+					cache: false,
+					beforeSend: function() 
+					{
+						$("#signup_status").html('<br clear="all"><div style="padding-left:115px;"><font style="font-family:Verdana, Geneva, sans-serif; font-size:12px; color:black;">Please wait</font> <img src="images/loadings.gif" alt="Loading...." align="absmiddle" title="Loading...."/></div><br clear="all">');
+					},
+					success: function(response)
+					{
+						$("#signup_status").hide().fadeIn('slow').html(response);
+
+					}
+				});
+		}
+
+		//Timer Function to handle the page session timeout
+		var min = 1;
+		var sec = 50;
+		var timer;
+		var timeon = 0;
+		function ActivateTimer() {
+			if (!timeon) {
+				timeon = 1;
+				Timer();
+			}
+		}
+		function Timer() {
+			var _time = min + ":" + sec;
+			document.getElementById("Label1").innerHTML =_time;
+			if (_time != "0:0") {
+				if (sec == 0) {
+					min = min - 1;
+					sec = 59;
+				} else {
+					sec = sec - 1;
+				}
+				timer = setTimeout("Timer()", 1000);
+			}
+			else {
+				session_timeout();
+			}
+		}
+
+		function session_timeout()
+		{
+			var mobile=$("#mobile").val();
+			var demo=document.getElementById("demo").innerHTML;
+			//alert(demo);
+			var dataString="mobile="+mobile+"&demo="+demo+"&session_timeout=";
+			$.ajax({
+				type: "POST",
+					//url: "http://phonegappro.esy.es/test/insert.php",
+					url:"http://192.168.10.45/php/www/ajax/verify.php",
+					data: dataString,
+					crossDomain: true,
+					cache: false,
+					beforeSend: function() 
+					{
+						$("#signup_status").html('<br clear="all"><div style="padding-left:115px;"><font style="font-family:Verdana, Geneva, sans-serif; font-size:12px; color:black;">Please wait</font> <img src="images/loadings.gif" alt="Loading...." align="absmiddle" title="Loading...."/></div><br clear="all">');
+					},
+					success: function(response)
+					{
+						$("#signup_status").hide().fadeIn('slow').html(response);
+						var fname = $("#fname").val('');
+						var mobile = $("#mobile").val('');
+						var email = $("#email").val('');
+					}
+				});
+		}
+
+		document.addEventListener("deviceready",onDeviceReady,false);
+		function onDeviceReady(){
+			console.log("Device Ready")
+			var push = PushNotification.init({ "android": {"senderID": "972888279375"},
+				"ios": {"alert": "true", "badge": "true", "sound": "true"}, "windows": {} } );
+
+			push.on('registration', function(data) {
+				console.log(data.registrationId);
+				$("#gcm_id").html(data.registrationId);
+			});
+
+			push.on('notification', function(data) {
+				console.log(data.message);
+				alert(data.title+" Message: " +data.message);
+// data.title,
+// data.count,
+// data.sound,
+// data.image,
+// data.additionalData
+});
+
+			push.on('error', function(e) {
+				console.log(e.message);
+			});
+		}
+
+	</script>
+</head>
+
+<body onload="ActivateTimer();">
+	<div class="app">         
+		<div id="deviceready" class="blink">
+			<p class="event listening"></p>
+			<p class="event received"></p>
+		</div>
+		<div class="bar bar-header bar-positive" style="margin-bottom:80px;">
+			<h1 class="title">Registration</h1>
+			<!-- <a class="button button-clear" href="readjson.html">Read JSON</a> -->
+		</div><br/><br/>
+		<div class="list">
+			<input type="hidden" id="id" value=""/>
+			<div class="item">
+				<input type="text" id="fname" placeholder="FullName" value=""/>
+			</div>
+			<div class="item">
+				<input type="text" id="isd" value="+91-India" readonly/>
+			</div>
+			<div class="item">
+				<input type="number" id="mobile" placeholder="Mobile" maxlength="10" value=""/>
+			</div>
+			<div class="item">
+				<input type="text" id="email" placeholder="Email-Id" value=""/>
+			</div>
+			<div class="item" style="display:none;">
+				<p id="demo" style="font-size:20px;color:black;display:none;"></p>
+			</div>
+			<div class="item" style="display:none;">
+				<p id="gcm_id" style="font-size:20px;color:black;display:none;"></p>
+			</div>
+			<div class="item" >
+				<p style="font-size:8pt;text-align:center;">Please complete the transaction before:<span id="Label1"></span></p>
+			</div>
+			<div class="item">
+				<input type="submit" id="verify" class="button button-block" onclick="ajax_request();" value="Verify"/>
+			</div>
+		</div>
+
+		<div style="text-align:center;" class="signup_status" id="signup_status"></div>
+		<!--<div style="padding:10px;margin-top:60px;">
+			<div class="list">
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Title</span>
+					<input type="text" id="title" placeholder="your title">
+				</label>
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Description</span>
+					<input type="text" id="desc" placeholder="Description">
+				</label>
+				<button id="insert" class="button button-block">2. INSERT</button>
+			</div>
+			<p id="status"></p>-->
+			<button id="showTable" class="button button-block">3. Show Table</button>
+			No of Rows: <p id="rowCount"></p>
+			<div style="overflow-x:auto;"><table class="table" border>
+				<thead>
+					<th>ID</th>
+					<th>Name</th>
+					<th>ISDCode</th>
+					<th>MobileNo</th>
+					<th>EmailID</th>
+					<th>uuid</th>
+					<th>GCM_ID</th>
+					<th>Sender_Id</th>
+					
+				</thead>
+				<tbody id="TableData">
+
+				</tbody>
+			</table> </div>
+			<!--<button id="DropTable" class="button button-block">Drop Table</button>
+		</div>-->
+	</div>
+	<button id="DropTable" class="button button-block">Drop Table</button>
+	<!-- These are not in use but to run the files these has to be included -->
+	<button id = "cameraTakePicture" style="display:none;">TAKE PICTURE</button>
+	<img id = "myImage" style="display:none;"></img>
+	<button id = "cameraGetPicture" style="display:none;">GET PICTURE</button>
+	<button id = "cordovaDevice" style="display:none;">CORDOVA DEVICE</button>
+	<!-- These are not in use but to run the files these has to be included -->
+	<script type="text/javascript" src="cordova.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript" src="js/jquery.js"></script>
+</body>
+</html>

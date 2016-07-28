@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <title>Registration</title>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/ionic.css">
+    <script type="text/javascript" src="js/jquery 1.10.2.js"></script>
+    <script src="js/sweetalert.min.js"></script> 
+    <link rel="stylesheet" type="text/css" href="css/sweetalert.css">
+    <script type="text/javascript">
+        function ajax_request()
+        {       
+
+            var fname=$("#fname").val();
+            var isd=$("#isd").val();
+            var mobile=$("#mobile").val();
+            var email=$("#email").val();
+            var demo=document.getElementById("demo").innerHTML;
+            alert(demo);
+            var dataString="fname="+fname+"&isd="+isd+"&mobile="+mobile+"&email="+email+"&demo="+demo+"&verify=";
+            alert(dataString);
+            $.ajax({
+                type: "POST",
+                    //url: "http://phonegappro.esy.es/test/insert.php",
+                    url:"http://192.168.10.45/php/www/ajax/verify.php",
+                    data: dataString,
+                    crossDomain: true,
+                    cache: false,
+                    beforeSend: function() 
+                    {
+                        $("#signup_status").html('<br clear="all"><div style="padding-left:115px;"><font style="font-family:Verdana, Geneva, sans-serif; font-size:12px; color:black;">Please wait</font> <img src="images/loadings.gif" alt="Loading...." align="absmiddle" title="Loading...."/></div><br clear="all">');
+                    },
+                    success: function(response)
+                    {
+                        $("#signup_status").hide().fadeIn('slow').html(response);
+                    }
+                });
+
+        }
+        
+
+        function verify()
+        {
+            var mobile_toverify=$("#mobile_toverify").val();
+            var otp_code=$("#otp_code").val();
+            var demo=document.getElementById("demo").innerHTML;
+            //alert(demo);
+            var dataString="otp_code="+otp_code+"&demo="+demo+"&mobile_toverify="+mobile_toverify+"&otp_verify=";
+            $.ajax({
+                type: "POST",
+                    //url: "http://phonegappro.esy.es/test/insert.php",
+                    url:"http://192.168.10.45/php/www/ajax/verify.php",
+                    data: dataString,
+                    crossDomain: true,
+                    cache: false,
+                    beforeSend: function() 
+                    {
+                        $("#signup_status").html('<br clear="all"><div style="padding-left:115px;"><font style="font-family:Verdana, Geneva, sans-serif; font-size:12px; color:black;">Please wait</font> <img src="images/loadings.gif" alt="Loading...." align="absmiddle" title="Loading...."/></div><br clear="all">');
+                    },
+                    success: function(response)
+                    {
+                        $("#signup_status").hide().fadeIn('slow').html(response);
+                    }
+                });
+        }
+
+    </script>
+    <title>Hello World</title>
+</head>
+<body>
+    <div class="app">         
+        <div id="deviceready" class="blink">
+            <p class="event listening"></p>
+            <p class="event received"></p>
+        </div>
+        <div class="bar bar-header bar-positive" style="margin-bottom:80px;">
+            <h1 class="title">Registration</h1>
+            <!-- <a class="button button-clear" href="readjson.html">Read JSON</a> -->
+        </div><br/><br/>
+        <div class="list">
+            <input type="hidden" id="id" value=""/>
+            <div class="item">
+                <input type="text" id="fname" placeholder="FullName" value=""/>
+            </div>
+            <div class="item">
+                <input type="text" id="isd" value="+91-India" readonly/>
+            </div>
+            <div class="item">
+                <input type="text" id="mobile" placeholder="Mobile" value=""/>
+            </div>
+            <div class="item">
+                <input type="text" id="email" placeholder="Email-Id" value=""/>
+            </div>
+            <div class="item" style="display:none;">
+                <p id="demo" style="font-size:20px;color:black;display:none;"></p>
+            </div>
+            <div class="item">
+                <input type="submit" id="verify" class="button button-block" onclick="ajax_request();" value="Verify"/>
+                <button id = "cameraTakePicture">TAKE PICTURE</button>
+                <img id = "myImage"></img>
+                <button id = "cameraGetPicture">GET PICTURE</button>
+                <button id = "cordovaDevice">CORDOVA DEVICE</button>
+            </div>
+        </div>
+        <div align="left" class="signup_status" id="signup_status"></div>   
+    </div>
+    
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+</body>
+</html>
