@@ -3,10 +3,10 @@ Handling OTP SMS, UUID in cordova using PHP,Ajax and MySQL
 
 Cordova Plugin used
 
-cordova-plugin-battery-status
-cordova-plugin-camera
-cordova-plugin-compat
-cordova-plugin-device
-cordova-plugin-whitelist
-cordova-sqlite-storage
-phonegap-plugin-push
+cordova-plugin-battery-status<br>
+cordova-plugin-camera<br>
+cordova-plugin-compat<br>
+cordova-plugin-device<br>
+cordova-plugin-whitelist<br>
+cordova-sqlite-storage<br>
+phonegap-plugin-push<br>
